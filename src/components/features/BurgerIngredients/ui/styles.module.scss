@@ -1,0 +1,53 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 600px;
+  align-items: center;
+
+  &Element {
+    width: 568px;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 14px;
+  }
+
+  &Items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 50vh;
+    overflow: auto;
+    width: 100%;
+    align-items: center;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #8585AD;
+    }
+
+    &Item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+  }
+
+  &Checkout {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 40px;
+
+    &Price {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+  }
+}
