@@ -1,0 +1,7 @@
+*.css
+*.scss
+*.svg
+*.d.ts
+*.stories.tsx
+build/**
+node_modules/**
