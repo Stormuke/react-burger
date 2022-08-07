@@ -1,11 +1,15 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import type { FC } from 'react';
 import { useCallback, useMemo, useState } from 'react';
-import { BurgerConstructorProps, Tabs } from 'types/types';
+import {
+
+  BurgerIngredientsProps,
+  Tabs,
+} from 'types/types';
 
 import styles from './styles.module.scss';
 
-export const BurgerIngredients: FC<BurgerConstructorProps> = ({
+export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
   children,
   activeTab,
 }) => {

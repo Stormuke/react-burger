@@ -30,19 +30,20 @@ export interface BurgerIngredientsData {
 export interface CardsProps {
   /** Массив карточек для отрисовки **/
   cards: BurgerIngredientsData[];
+
 }
 
 /* Пропсы компонента ингредиенты */
 export interface BurgerIngredientsProps {
-  /** Массив ингредиентов **/
-  ingredients: BurgerIngredientsData[];
+  /** Колбек для переключения табов, содержит в себе значение для корректной
+   * работы, а так же фильтрации массива моков **/
+  activeTab: (value: string) => void;
 }
 
 /* Пропсы компонента конструктора заказов */
 export interface BurgerConstructorProps {
-  /** Колбек для переключения табов, содержит в себе значение для корректной
-   * работы, а так же фильтрации массива моков **/
-  activeTab: (value: string) => void;
+  /** Массив ингредиентов **/
+  ingredients: BurgerIngredientsData[];
 }
 
 /* Табы */
