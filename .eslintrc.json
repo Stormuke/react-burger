@@ -7,7 +7,6 @@
     "plugin:react/recommended",
     "airbnb",
     "plugin:@typescript-eslint/recommended",
-    "@feature-sliced",
     "prettier",
     "plugin:storybook/recommended",
     "plugin:typescript-sort-keys/recommended"
