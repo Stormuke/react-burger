@@ -5,8 +5,8 @@ import {
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC, useMemo } from 'react';
+import { HeaderButton } from 'types/types';
 
-import { HeaderButton } from 'components/widgets/AppHeader';
 import styles from './styles.module.scss';
 
 export const AppHeader: FC = () => {
@@ -19,7 +19,7 @@ export const AppHeader: FC = () => {
   );
 
   return (
-    <section className={styles.header}>
+    <header className={styles.header}>
       <div className={styles.headerContainer}>
         <div className={styles.headerContainerButtons}>
           {buttons.map((item) => (
@@ -48,6 +48,6 @@ export const AppHeader: FC = () => {
         </div>
 
       </div>
-    </section>
+    </header>
   );
 };

@@ -5,11 +5,11 @@ import {
   DragIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import type { FC } from 'react';
+import { BurgerIngredientsProps } from 'types/types';
 
-import { BurgerIngredientsProps } from '..';
 import styles from './styles.module.scss';
 
-export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
+export const BurgerConstructor: FC<BurgerIngredientsProps> = ({
   ingredients,
 }) => (
   <section className={styles.container}>

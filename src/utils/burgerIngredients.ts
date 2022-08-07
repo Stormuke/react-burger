@@ -1,4 +1,4 @@
-export const burgerIngredients: import('components/pages/PageWithConstructor').BurgerIngredientsData[] = [
+export const burgerIngredients: import('types/types').BurgerIngredientsData[] = [
   {
     _id: '60666c42cc7b410027a1a9b1',
     name: 'Краторная булка N-200i',

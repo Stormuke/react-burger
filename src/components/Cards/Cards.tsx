@@ -1,6 +1,6 @@
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import type { FC } from 'react';
-import { CardsProps } from 'components/widgets/Cards';
+import { CardsProps } from 'types/types';
 import styles from './styles.module.scss';
 
 export const Cards: FC<CardsProps> = ({ cards }) => (
