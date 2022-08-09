@@ -1,0 +1,28 @@
+.header {
+  width: 100%;
+  background: #1c1c21;
+  padding: 16px 0;
+
+  &Logo {
+    margin: 0 273px 0 122px;
+  }
+
+  &Container {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    width: 67%;
+
+    &Buttons {
+      display: flex;
+      gap: 20px;
+
+      &Element {
+        display: flex;
+        gap: 8px;
+        padding: 16px 20px;
+        cursor: pointer;
+      }
+    }
+  }
+}

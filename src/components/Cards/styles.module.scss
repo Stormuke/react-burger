@@ -1,0 +1,42 @@
+.container {
+  margin-top: 24px;
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  height: 50vh;
+  overflow: auto;
+  gap: 20px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #8585AD;
+  }
+
+  &Element {
+    width: 272px;
+    height: 208px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+
+    &Image {
+      width: 240px;
+      height: 120px;
+    }
+
+    &Title {
+      text-align: center;
+    }
+
+    &Price {
+      display: flex;
+      gap: 8px;
+    }
+  }
+}
