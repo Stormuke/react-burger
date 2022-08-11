@@ -1,12 +1,13 @@
 import { ReactElement } from 'react';
 
-/* Моковые данные ингредиентов */
+/* Данные ингредиентов */
 export interface BurgerIngredientsData {
   __v: number;
   /** Уникальный айди **/
   _id: string;
   /** Калорийность **/
   calories: number;
+  /** Углеводы **/
   carbohydrates: number;
   /** Жиры **/
   fat: number;
@@ -26,11 +27,14 @@ export interface BurgerIngredientsData {
   type: string;
 }
 
+/***********************************************
+ *              Пропсы компонентов
+ **********************************************/
+
 /* Пропсы компонента карточек ингредиентов */
 export interface CardsProps {
   /** Массив карточек для отрисовки **/
   cards: BurgerIngredientsData[];
-
 }
 
 /* Пропсы компонента ингредиенты */
@@ -46,24 +50,65 @@ export interface BurgerConstructorProps {
   ingredients: BurgerIngredientsData[];
 }
 
+/* Пропсы компонента модального окна */
+export interface ModalProps {
+  /** Статус попапа **/
+  isOpened: boolean;
+  /** Колбек закрытия **/
+  onClose: Callback;
+  /** Заголовок **/
+  title: string;
+}
+
+/* Пропсы компонента оверлея модального окна */
+export interface ModalOverlayProps {
+  /** Колбек закрытия **/
+  onClose: Callback;
+}
+
+/* Пропсы компонента попапа с деталями заказа */
+export interface PopupWithOrderDetailProps {
+  /** Статус попапа **/
+  isOpened: boolean;
+  /** Колбек закрытия **/
+  onClose: Callback;
+  /** Заголовок **/
+  title: string;
+}
+
+/* Пропсы компонента попапа с детальным описанием ингредиента */
+export interface PopupWithIngredientsDetailsProps {
+  card: BurgerIngredientsData | null;
+  /** Статус попапа **/
+  isOpened: boolean;
+  /** Колбек закрытия **/
+  onClose: Callback;
+  /** Заголовок **/
+  title: string;
+}
+
+/***********************************************
+ *              Типизация данных
+ **********************************************/
+
 /* Табы */
-export interface Tabs {
+export interface Tabs extends TitleAndKey {
   /** Состояние таба, проверяется по велью активного таба **/
   active: boolean;
   /** Колбек переключения, значение берется из ключа велью **/
   onClick: (value: string) => void;
-  /** Название таба **/
-  title: string;
   /** Значение, нужно для корректной работы табов **/
   value: string;
 }
 
 /* Кнопки хедера */
-export interface HeaderButton {
+export interface HeaderButton extends TitleAndKey {
   /** Иконка **/
   element: ReactElement;
-  /** Ключ **/
-  key: string;
-  /** Название кнопки **/
-  title: string;
+}
+
+/* Пищевая ценность */
+export interface IngredientNutrition extends TitleAndKey {
+  /** Колличество **/
+  value?: number;
 }
