@@ -15,6 +15,7 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
 }) => {
   const [active, setActive] = useState('bun');
 
+
   const setTab = useCallback(
     (value) => {
       setActive(value);
@@ -30,18 +31,21 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
         onClick: (value) => setTab(value),
         active: active === 'bun',
         title: 'Булки',
+        key: '1'
       },
       {
         value: 'sauce',
         onClick: (value) => setTab(value),
         active: active === 'sauce',
         title: 'Соусы',
+        key: '2'
       },
       {
         value: 'main',
         onClick: (value) => setTab(value),
         active: active === 'main',
         title: 'Начинки',
+        key: '3'
       },
     ],
     [active, setTab],
@@ -55,7 +59,7 @@ export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
             value={item.value}
             onClick={item.onClick}
             active={item.active}
-            key={item.value}
+            key={item.key}
           >
             {item.title}
           </Tab>
