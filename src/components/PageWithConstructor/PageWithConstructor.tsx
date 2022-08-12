@@ -17,8 +17,9 @@ const PageWithConstructor: FC = () => {
   useEffect(() => {
     setIsPending(true);
     fetch(BASE_URL)
-      .then(res => res.ok && res.json())
+      .then(res => res.ok ? res.json() : Promise.reject(res.status))
       .then(res => setIngredients(res.data))
+      .catch(err => console.log(`Произошла ошибка при запросе: ${err}`))
       .finally(() => setIsPending(false))
   }, [])
 
