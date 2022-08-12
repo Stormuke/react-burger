@@ -66,25 +66,9 @@ export interface ModalOverlayProps {
   onClose: Callback;
 }
 
-/* Пропсы компонента попапа с деталями заказа */
-export interface PopupWithOrderDetailProps {
-  /** Статус попапа **/
-  isOpened: boolean;
-  /** Колбек закрытия **/
-  onClose: Callback;
-  /** Заголовок **/
-  title: string;
-}
-
 /* Пропсы компонента попапа с детальным описанием ингредиента */
-export interface PopupWithIngredientsDetailsProps {
+export interface IngredientsDetailsProps {
   card: BurgerIngredientsData | null;
-  /** Статус попапа **/
-  isOpened: boolean;
-  /** Колбек закрытия **/
-  onClose: Callback;
-  /** Заголовок **/
-  title: string;
 }
 
 /***********************************************
