@@ -5,13 +5,14 @@ import {
 import type { FC } from 'react';
 import { BurgerIngredientsData, CardsProps } from 'types/types';
 import { useState } from 'react';
-import { PopupWithIngredientsDetails } from '../PopupWithIgredientsDetails/PopupWithIngredientsDetails';
+import { IngredientsDetails } from 'components/IgredientsDetails/IngredientsDetails';
+import { Modal } from 'components/Modal/Modal';
 
 import styles from './styles.module.scss';
 
 export const Cards: FC<CardsProps> = ({ cards }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [card, setCard] = useState<BurgerIngredientsData | null>(null)
+  const [card, setCard] = useState<BurgerIngredientsData | null>(null);
 
   return (
     <div className={styles.container}>
@@ -20,7 +21,7 @@ export const Cards: FC<CardsProps> = ({ cards }) => {
           className={styles.containerElement}
           onClick={() => {
             setIsPopupOpen(true);
-            setCard(item)
+            setCard(item);
           }}
           key={item._id}
         >
@@ -40,12 +41,13 @@ export const Cards: FC<CardsProps> = ({ cards }) => {
         </div>
       ))}
 
-      <PopupWithIngredientsDetails
+      <Modal
         isOpened={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
-        card={card}
-        title='Детали ингредиента'
-      />
+        title="Детали ингредиента"
+      >
+        <IngredientsDetails card={card} />
+      </Modal>
     </div>
   );
 };

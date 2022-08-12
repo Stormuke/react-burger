@@ -7,18 +7,15 @@ import {
 import type { FC } from 'react';
 import { BurgerConstructorProps } from 'types/types';
 import { useState } from 'react';
-import {
-  PopupWithOrderDetails
-} from '../PopupWithOrderDetails/PopupWithOrderDetails';
-
+import { Modal } from 'components/Modal/Modal';
+import { OrderDetails } from 'components/OrderDetails/OrderDetails';
 
 import styles from './styles.module.scss';
-
 
 export const BurgerConstructor: FC<BurgerConstructorProps> = ({
   ingredients,
 }) => {
-  const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   return (
     <section className={styles.container}>
@@ -27,7 +24,7 @@ export const BurgerConstructor: FC<BurgerConstructorProps> = ({
           text={`${ingredients[0].name} (Верх)`}
           thumbnail={ingredients[0].image}
           price={ingredients[0].price}
-          type='top'
+          type="top"
           isLocked
         />
       </div>
@@ -36,7 +33,7 @@ export const BurgerConstructor: FC<BurgerConstructorProps> = ({
           (item) =>
             item.type !== 'bun' && (
               <div className={styles.containerItemsItem} key={item._id}>
-                <DragIcon type='secondary' />
+                <DragIcon type="secondary" />
                 <ConstructorElement
                   key={item._id}
                   text={item.name}
@@ -52,22 +49,28 @@ export const BurgerConstructor: FC<BurgerConstructorProps> = ({
           text={`${ingredients[0].name} (Низ)`}
           thumbnail={ingredients[0].image}
           price={ingredients[0].price}
-          type='bottom'
+          type="bottom"
           isLocked
         />
       </div>
 
       <div className={styles.containerCheckout}>
         <div className={styles.containerCheckoutPrice}>
-          <p className='text text_type_digits-medium'>
+          <p className="text text_type_digits-medium">
             {ingredients.reduce((acc, item) => acc + item.price, 0)}
           </p>
-          <CurrencyIcon type='primary' />
+          <CurrencyIcon type="primary" />
         </div>
         <Button onClick={() => setIsPopupOpen(true)}>Оформить заказ</Button>
       </div>
 
-      <PopupWithOrderDetails isOpened={isPopupOpen} onClose={() => setIsPopupOpen(false)} title=''/>
+      <Modal
+        isOpened={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        title=""
+      >
+        <OrderDetails />
+      </Modal>
     </section>
-  )
-}
+  );
+};
