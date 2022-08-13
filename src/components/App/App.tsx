@@ -1,14 +1,15 @@
-import Routing from 'components/Routing/Routing';
 import { withProviders } from 'components/WithRouter/withRouter';
 import type { FC } from 'react';
-import { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 
 import styles from './styles.module.scss';
 
+const Routing = lazy(() => import('components/Routing/Routing'))
+
 export const App: FC = () => (
   <main className={styles.App}>
-    <Suspense fallback='...Загрузка'>
-        <Routing />
+    <Suspense fallback={<p>...Загрузка</p>}>
+      <Routing />
     </Suspense>
   </main>
 );

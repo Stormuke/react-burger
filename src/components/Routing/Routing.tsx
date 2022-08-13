@@ -1,8 +1,10 @@
 import type { ReactElement } from 'react';
-import { useMemo } from 'react';
+import { lazy, useMemo } from 'react';
 import type { RouteObject } from 'react-router-dom';
 import { useRoutes } from 'react-router-dom';
-import { PageWithConstructor } from '../PageWithConstructor/PageWithConstructor';
+
+
+const PageWithConstructor = lazy(() => import('../PageWithConstructor/PageWithConstructor')) ;
 
 const Routing = (): ReactElement | null => {
   const routes = useMemo<RouteObject[]>(
