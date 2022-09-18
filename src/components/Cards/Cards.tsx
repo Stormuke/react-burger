@@ -1,44 +1,39 @@
-import {
-  Counter,
-  CurrencyIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
 import type { FC } from 'react';
-import { BurgerIngredientsData, CardsProps } from 'types/types';
+import { BurgerIngredientsData } from 'types/types';
 import { useState } from 'react';
 import { IngredientsDetails } from 'components/IgredientsDetails/IngredientsDetails';
 import { Modal } from 'components/Modal/Modal';
+import { useAppSelector } from 'services/rootReducer';
+import { IngredientsStore } from 'services';
+import { Card } from 'components/Card/Card';
+import { v4 } from 'uuid';
 
 import styles from './styles.module.scss';
 
-export const Cards: FC<CardsProps> = ({ cards }) => {
+export const Cards: FC = () => {
+  /***************************************************
+   *                     Стейты
+   ***************************************************/
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [card, setCard] = useState<BurgerIngredientsData | null>(null);
+
+  /***************************************************
+   *                    Селекторы
+   ***************************************************/
+  const { response, tab } = useAppSelector(
+    IngredientsStore.allIngredientsSelectors,
+  );
+  const cards = response.data.filter((i) => i.type === tab);
 
   return (
     <div className={styles.container}>
       {cards.map((item) => (
-        <div
-          className={styles.containerElement}
-          onClick={() => {
-            setIsPopupOpen(true);
-            setCard(item);
-          }}
-          key={item._id}
-        >
-          <Counter count={1} size="default" />
-          <img
-            className={styles.containerElementImage}
-            src={item.image_large}
-            alt={item.name}
-          />
-
-          <div className={styles.containerElementPrice}>
-            <p className="text text_type_digits-default">{item.price}</p>
-            <CurrencyIcon type="primary" />
-          </div>
-
-          <p className="text text_type_main-default ">{item.name}</p>
-        </div>
+        <Card
+          key={v4()}
+          item={item}
+          onClick={() => setIsPopupOpen(true)}
+          setIngredient={setCard}
+        />
       ))}
 
       <Modal
