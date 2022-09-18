@@ -11,7 +11,7 @@ const isPendingSelector = createSelector(
 
 const responseSelector = createSelector(selectSelf, (state) => state.response);
 
-const orderSelector = createSelector(selectSelf, (state) => state.order)
+const orderSelector = createSelector(selectSelf, (state) => state.order);
 
 export const allOrderSelectors = createSelector(
   [responseSelector, isPendingSelector, orderSelector],

@@ -9,8 +9,7 @@ const PageWithConstructor = lazy(
 );
 
 const Routing = (): ReactElement | null => {
-  const { handleGetIngredients } =
-    IngredientsStore.useAllIngredientsActions();
+  const { handleGetIngredients } = IngredientsStore.useAllIngredientsActions();
 
   useEffect(() => {
     handleGetIngredients('ingredients');

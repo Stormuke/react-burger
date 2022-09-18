@@ -9,7 +9,9 @@ import { Loader } from '../../utils/ui/Loader/Loader';
 export const OrderDetails: FC = () => {
   const { response, isPending } = useAppSelector(OrderStore.allOrderSelectors);
 
-  return isPending ? <Loader className={styles.spinner}/> : (
+  return isPending ? (
+    <Loader className={styles.spinner} />
+  ) : (
     <div className={styles.content}>
       <p className="text text_type_digits-large">{response.order.number}</p>
       <p className="text text_type_main-medium mt-8 mb-15">

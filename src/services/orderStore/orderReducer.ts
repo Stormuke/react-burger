@@ -48,11 +48,7 @@ const slice = createSlice({
       if (dragItem) {
         const newArr = [...state.order];
 
-        const deleteItem = newArr.splice(
-          payload.hoverIndex,
-          1,
-          dragItem,
-        );
+        const deleteItem = newArr.splice(payload.hoverIndex, 1, dragItem);
 
         newArr.splice(payload.dragIndex, 1, deleteItem[0]);
 

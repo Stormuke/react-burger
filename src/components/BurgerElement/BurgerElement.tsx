@@ -33,20 +33,20 @@ export const BurgerElement: FC<BurgerElementProps> = ({ item, index }) => {
   });
 
   return (
-    <div className={styles.element} key={item.key} ref={dropRef}>
-        <div ref={dragRef} className={styles.element}>
-          <button className={styles.elementButton}>
-            <DragIcon type="secondary" />
-          </button>
+    <div className={styles.element} ref={dropRef}>
+      <div ref={dragRef} className={styles.element}>
+        <button className={styles.elementButton}>
+          <DragIcon type="secondary" />
+        </button>
 
-          <ConstructorElement
-            handleClose={() => handleDelete(item.key)}
-            key={item.key}
-            text={item.name}
-            thumbnail={item.image}
-            price={item.price}
-          />
-        </div>
+        <ConstructorElement
+          handleClose={() => handleDelete(item.key)}
+          key={item.key}
+          text={item.name}
+          thumbnail={item.image}
+          price={item.price}
+        />
+      </div>
     </div>
   );
 };
