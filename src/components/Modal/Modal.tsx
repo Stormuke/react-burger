@@ -26,6 +26,7 @@ export const Modal: FC<ModalProps> = ({
     document.addEventListener('keydown', handleEscClose, false);
 
     return () => document.removeEventListener('keydown', handleEscClose, false);
+    // Отключил линтер, колбеки не нужны в зависимостях
     // eslint-disable-next-line
   }, []);
 

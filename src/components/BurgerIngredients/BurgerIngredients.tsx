@@ -45,6 +45,7 @@ export const BurgerIngredients: FC = ({ children }) => {
         key: '3',
       },
     ],
+    // Отключил линтер, колбеки не нужны в зависимостях
     // eslint-disable-next-line
     [tab],
   );

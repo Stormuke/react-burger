@@ -34,6 +34,8 @@ export const Card: FC<CardProps> = ({ item, setIngredient, onClick }) => {
   const handleOpenPopup = useCallback(() => {
     onClick();
     setIngredient(item);
+    // Отключил линтер, колбеки не нужны в зависимостях
+    // eslint-disable-next-line
   }, [item]);
 
   return (
