@@ -8,6 +8,7 @@ import { useDrag } from 'react-dnd';
 import { CardProps } from 'types/types';
 import { OrderStore } from 'services';
 import { useAppSelector } from 'services/rootReducer';
+import { useCallback } from 'react';
 
 import styles from './styles.module.scss';
 
@@ -30,15 +31,16 @@ export const Card: FC<CardProps> = ({ item, setIngredient, onClick }) => {
     }),
   });
 
+  const handleOpenPopup = useCallback(() => {
+    onClick();
+    setIngredient(item);
+  }, [item]);
+
   return (
     <div
       style={{ opacity }}
       className={styles.element}
-      onClick={() => {
-        onClick();
-        setIngredient(item);
-      }}
-      key={item.key}
+      onClick={handleOpenPopup}
     >
       <Counter count={count} size="default" />
       <img
