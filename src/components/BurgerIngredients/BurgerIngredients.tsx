@@ -1,54 +1,52 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import type { FC } from 'react';
-import { useCallback, useMemo, useState } from 'react';
-import {
-
-  BurgerIngredientsProps,
-  Tabs,
-} from 'types/types';
+import { useMemo } from 'react';
+import { IngredientsStore } from 'services';
+import { Tabs } from 'types/types';
 
 import styles from './styles.module.scss';
+import { useAppSelector } from '../../services/rootReducer';
 
-export const BurgerIngredients: FC<BurgerIngredientsProps> = ({
-  children,
-  activeTab,
-}) => {
-  const [active, setActive] = useState('bun');
+export const BurgerIngredients: FC = ({ children }) => {
+  /***************************************************
+   *                     Экшены
+   ***************************************************/
+  const { handleTabSwitch } = IngredientsStore.useAllIngredientsActions();
 
+  /***************************************************
+   *                     Селекторы
+   ***************************************************/
+  const { tab } = useAppSelector(IngredientsStore.allIngredientsSelectors);
 
-  const setTab = useCallback(
-    (value) => {
-      setActive(value);
-      activeTab(value);
-    },
-    [activeTab],
-  );
-
+  /***************************************************
+   *                    Мемоизация
+   ***************************************************/
   const tabs = useMemo<Tabs[]>(
     () => [
       {
         value: 'bun',
-        onClick: (value) => setTab(value),
-        active: active === 'bun',
+        onClick: (value) => handleTabSwitch(value),
+        active: tab === 'bun',
         title: 'Булки',
-        key: '1'
+        key: '1',
       },
       {
         value: 'sauce',
-        onClick: (value) => setTab(value),
-        active: active === 'sauce',
+        onClick: (value) => handleTabSwitch(value),
+        active: tab === 'sauce',
         title: 'Соусы',
-        key: '2'
+        key: '2',
       },
       {
         value: 'main',
-        onClick: (value) => setTab(value),
-        active: active === 'main',
+        onClick: (value) => handleTabSwitch(value),
+        active: tab === 'main',
         title: 'Начинки',
-        key: '3'
+        key: '3',
       },
     ],
-    [active, setTab],
+    // eslint-disable-next-line
+    [tab],
   );
 
   return (
