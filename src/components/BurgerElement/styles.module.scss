@@ -1,0 +1,15 @@
+.element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  cursor: grab;
+
+  &Button {
+    background: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+    cursor: grab;
+  }
+}

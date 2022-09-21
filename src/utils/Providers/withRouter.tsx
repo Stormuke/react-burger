@@ -1,16 +1,11 @@
-import compose from 'compose-function'
 import { Suspense } from 'react';
 import type { FC } from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { Loader } from '../ui/Loader/Loader';
 
 export const withRouter = (component: () => FC) => () =>
   (
     <BrowserRouter>
-        <Suspense fallback='...Загрузка'>{component()}</Suspense>
+      <Suspense fallback={<Loader />}>{component()}</Suspense>
     </BrowserRouter>
   );
-
-export const withProviders = compose(
-  withRouter,
-);
-

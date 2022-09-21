@@ -12,8 +12,16 @@ import styles from './styles.module.scss';
 export const AppHeader: FC = () => {
   const buttons = useMemo<HeaderButton[]>(
     () => [
-      { element: <BurgerIcon type="primary" />, title: 'Конструктор', key: '1' },
-      { element: <ListIcon type="secondary" />, title: 'Лента заказов', key: '2' },
+      {
+        element: <BurgerIcon type="primary" />,
+        title: 'Конструктор',
+        key: '1',
+      },
+      {
+        element: <ListIcon type="secondary" />,
+        title: 'Лента заказов',
+        key: '2',
+      },
     ],
     [],
   );
@@ -28,7 +36,11 @@ export const AppHeader: FC = () => {
               key={item.key}
             >
               {item.element}
-              <p className={`text text_type_main-default text_color_${item.key === '1' ? 'primary' : 'inactive'}`}>
+              <p
+                className={`text text_type_main-default text_color_${
+                  item.key === '1' ? 'primary' : 'inactive'
+                }`}
+              >
                 {item.title}
               </p>
             </div>
@@ -39,14 +51,12 @@ export const AppHeader: FC = () => {
           <Logo />
         </div>
 
-
         <div className={styles.headerContainerButtonsElement}>
           <ProfileIcon type="secondary" />
           <p className="text text_type_main-default text_color_inactive">
             Личный кабинет
           </p>
         </div>
-
       </div>
     </header>
   );
