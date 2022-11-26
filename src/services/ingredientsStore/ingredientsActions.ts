@@ -10,3 +10,14 @@ export const getIngredientsThunk = createAsyncThunk<IngredientsData, Endpoint>(
     return data;
   },
 );
+
+export const getUserDataThunk = createAsyncThunk<
+  { success: boolean; user: { email: string; name: string } },
+  { cookie: string; url: Endpoint }
+>('ingredients/getUserData', async ({ url, cookie }) => {
+  const { data } = await apiInstance.get(url, {
+    headers: { authorization: `Bearer ${cookie}` },
+  });
+
+  return data;
+});
