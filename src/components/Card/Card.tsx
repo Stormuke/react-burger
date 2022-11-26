@@ -8,11 +8,13 @@ import { useDrag } from 'react-dnd';
 import { CardProps } from 'types/types';
 import { OrderStore } from 'services';
 import { useAppSelector } from 'services/rootReducer';
-import { useCallback } from 'react';
+import { Link } from 'react-router-dom';
 
 import styles from './styles.module.scss';
 
-export const Card: FC<CardProps> = ({ item, setIngredient, onClick }) => {
+export const Card: FC<CardProps> = ({ item }) => {
+  const ingredientId = item._id;
+
   /*****************************************************
    *                   Селекторы
    ***************************************************/
@@ -21,7 +23,7 @@ export const Card: FC<CardProps> = ({ item, setIngredient, onClick }) => {
   const count = order.filter((i) => i.name === item.name).length;
 
   /*****************************************************
-   *                     Хуки
+   *                     Колбеки
    ***************************************************/
   const [{ opacity }, drag] = useDrag({
     type: 'item',
@@ -31,33 +33,33 @@ export const Card: FC<CardProps> = ({ item, setIngredient, onClick }) => {
     }),
   });
 
-  const handleOpenPopup = useCallback(() => {
-    onClick();
-    setIngredient(item);
-    // Отключил линтер, колбеки не нужны в зависимостях
-    // eslint-disable-next-line
-  }, [item]);
-
+  /*****************************************************
+   *                     UI
+   ***************************************************/
   return (
-    <div
-      style={{ opacity }}
-      className={styles.element}
-      onClick={handleOpenPopup}
+    <Link
+      to={{
+        pathname: `/ingredients/${ingredientId}`,
+        state: { isPopup: true },
+      }}
+      key={ingredientId}
     >
-      <Counter count={count} size="default" />
-      <img
-        ref={drag}
-        className={styles.elementImage}
-        src={item.image_large}
-        alt={item.name}
-      />
+      <div style={{ opacity }} className={styles.element}>
+        <Counter count={count} size="default" />
+        <img
+          ref={drag}
+          className={styles.elementImage}
+          src={item.image_large}
+          alt={item.name}
+        />
 
-      <div className={styles.elementPrice}>
-        <p className="text text_type_digits-default">{item.price}</p>
-        <CurrencyIcon type="primary" />
+        <div className={styles.elementPrice}>
+          <p className="text text_type_digits-default">{item.price}</p>
+          <CurrencyIcon type="primary" />
+        </div>
+
+        <p className="text text_type_main-default ">{item.name}</p>
       </div>
-
-      <p className="text text_type_main-default ">{item.name}</p>
-    </div>
+    </Link>
   );
 };
