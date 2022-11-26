@@ -16,7 +16,7 @@
     "axios": "^0.27.2",
     "classnames": "^2.3.2",
     "compose-function": "^3.0.3",
-    "eslint": "^8.11.0",
+    "eslint": "^8.22.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^2.7.0",
@@ -37,8 +37,8 @@
     "react-dom": "^16.8.6",
     "react-error-boundary": "^3.1.4",
     "react-redux": "^8.0.2",
-    "react-router": "^6.3.0",
-    "react-router-dom": "^6.3.0",
+    "react-router": "^5.2.1",
+    "react-router-dom": "^5.2.1",
     "react-scripts": "5.0.1",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",
@@ -73,6 +73,7 @@
   },
   "devDependencies": {
     "@types/compose-function": "^0.0.30",
+    "@types/react-router-dom": "^5.1.7",
     "@types/uuid": "^8.3.4"
   }
 }
