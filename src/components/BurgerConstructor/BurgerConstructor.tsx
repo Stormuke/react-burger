@@ -4,6 +4,7 @@ import {
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import type { FC } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Modal } from 'components/Modal/Modal';
 import { OrderDetails } from 'components/OrderDetails/OrderDetails';
@@ -13,11 +14,15 @@ import { useDrop } from 'react-dnd';
 import { BurgerIngredientsData } from 'types/types';
 import { v4 } from 'uuid';
 import { BurgerElement } from 'components/BurgerElement/BurgerElement';
+import { getCookie } from 'utils/cookie';
+import { EmptyConstructor } from 'components/EmptyConstructor/EmptyConstructor';
 
 import styles from './styles.module.scss';
-import { EmptyConstructor } from '../EmptyConstructor/EmptyConstructor';
 
 export const BurgerConstructor: FC = () => {
+  const login = getCookie('accessToken');
+  const history = useHistory();
+
   /***************************************************
    *                   Стейты                        *
    ***************************************************/
@@ -33,6 +38,19 @@ export const BurgerConstructor: FC = () => {
    *                   Селекторы                      *
    ***************************************************/
   const { isPending, order } = useAppSelector(OrderStore.allOrderSelectors);
+
+  /*****************************************************
+   *                   Колбеки                        *
+   ***************************************************/
+  const handleOrder = (): void =>
+    login
+      ? handlePostOrder({
+          endpoint: 'orders',
+          body: {
+            ingredients: order.map((item) => item._id),
+          },
+        })
+      : history.replace('/login');
 
   /*****************************************************
    *                   Сайды                          *
@@ -97,16 +115,7 @@ export const BurgerConstructor: FC = () => {
               </p>
               <CurrencyIcon type="primary" />
             </div>
-            <Button
-              onClick={() =>
-                handlePostOrder({
-                  endpoint: 'orders',
-                  body: {
-                    ingredients: order.map((item) => item._id),
-                  },
-                })
-              }
-            >
+            <Button htmlType="button" onClick={handleOrder}>
               Оформить заказ
             </Button>
           </div>
