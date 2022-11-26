@@ -11,6 +11,11 @@ export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
       console.warn('We got a rejected action!'); // eslint-disable-line no-console
       console.log(action); // eslint-disable-line no-console
       console.groupEnd(); // eslint-disable-line no-console
+
+      if (action?.error) {
+        // eslint-disable-next-line no-alert
+        alert('Произошла ошибка, попробуйте еще раз')
+      }
     }
   } catch (error) {
     // eslint-disable-next-line no-console
