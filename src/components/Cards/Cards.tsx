@@ -1,8 +1,6 @@
 import type { FC, RefObject } from 'react';
 import { BurgerIngredientsData } from 'types/types';
-import { useState, useEffect, useRef } from 'react';
-import { IngredientsDetails } from 'components/IgredientsDetails/IngredientsDetails';
-import { Modal } from 'components/Modal/Modal';
+import { useEffect, useRef } from 'react';
 import { useAppSelector } from 'services/rootReducer';
 import { IngredientsStore } from 'services';
 import { Card } from 'components/Card/Card';
@@ -25,12 +23,6 @@ export const Cards: FC = () => {
   const mainRef = useRef<HTMLDivElement>(null);
   const sauceRef = useRef<HTMLDivElement>(null);
   const ingredientsArray: IngredientsArray[] = [];
-
-  /***************************************************
-   *                     Стейты
-   ***************************************************/
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [card, setCard] = useState<BurgerIngredientsData | null>(null);
 
   /***************************************************
    *                    Селекторы
@@ -114,24 +106,11 @@ export const Cards: FC = () => {
           <p className="text text_type_main-large mb-6">{item.title}</p>
           <div className={styles.containerItems}>
             {item.data.map((element) => (
-              <Card
-                key={element._id}
-                item={element}
-                onClick={() => setIsPopupOpen(true)}
-                setIngredient={setCard}
-              />
+              <Card key={element._id} item={element} />
             ))}
           </div>
         </div>
       ))}
-
-      <Modal
-        isOpened={isPopupOpen}
-        onClose={() => setIsPopupOpen(false)}
-        title="Детали ингредиента"
-      >
-        <IngredientsDetails card={card} />
-      </Modal>
     </div>
   );
 };
