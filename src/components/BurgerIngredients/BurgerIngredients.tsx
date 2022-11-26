@@ -3,15 +3,18 @@ import type { FC } from 'react';
 import { useMemo } from 'react';
 import { IngredientsStore } from 'services';
 import { Tabs } from 'types/types';
+import { useAppSelector } from 'services/rootReducer';
+import { useCreateSliceActions } from 'utils/useCreateSliceActions';
 
 import styles from './styles.module.scss';
-import { useAppSelector } from '../../services/rootReducer';
 
 export const BurgerIngredients: FC = ({ children }) => {
   /***************************************************
    *                     Экшены
    ***************************************************/
-  const { handleTabSwitch } = IngredientsStore.useAllIngredientsActions();
+  const { handleTabSwitch } = useCreateSliceActions(
+    IngredientsStore.slice.actions,
+  );
 
   /***************************************************
    *                     Селекторы
