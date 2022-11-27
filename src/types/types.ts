@@ -200,8 +200,11 @@ export interface AuthResponse {
 }
 
 export interface CabinetInitial {
-  inputs: Record<string, string>;
-  isPending: boolean;
+  cabinet: {
+    form: Record<string, string>;
+    inputs: Record<string, string>;
+    isPending: boolean;
+  };
 }
 
 export type User = { email: string; name: string };
