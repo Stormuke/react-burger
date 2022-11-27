@@ -62,10 +62,6 @@ export interface IngredientsDetailsProps {
 export interface CardProps {
   /** Данные ингредиента **/
   item: BurgerIngredientsData;
-  /** Колбек открытия **/
-  onClick: Callback;
-  /** Передача ингредиента в попап **/
-  setIngredient: (item: BurgerIngredientsData) => void;
 }
 
 export interface BurgerElementProps {
@@ -94,6 +90,8 @@ export interface Tabs extends TitleAndKey {
 export interface HeaderButton extends TitleAndKey {
   /** Иконка **/
   element: ReactElement;
+  /** Роут **/
+  route: string;
 }
 
 /* Пищевая ценность */
@@ -116,6 +114,7 @@ export interface IngredientsInitialState {
   isPending: boolean;
   /** Ответ **/
   response: IngredientsData;
+  selectedCard: BurgerIngredientsData | null;
   /** Активный таб **/
   tab: string;
 }
@@ -154,11 +153,6 @@ export interface IngredientsData {
 
 /* Экшены */
 
-export interface UseIngredientsAction {
-  handleGetIngredients: (endpoint: Endpoint) => void;
-  handleTabSwitch: (value: string) => void;
-}
-
 export interface UseOrderAction {
   handleDelete: (id: string) => void;
   handleDrop: (item: BurgerIngredientsData) => void;
@@ -166,3 +160,51 @@ export interface UseOrderAction {
   handleReset: Callback;
   handleSort: (item: { dragIndex: number; hoverIndex: number }) => void;
 }
+
+export interface AuthInitial {
+  error: AppError;
+  form: AuthForm[];
+  isPending: boolean;
+}
+
+type AuthForm = Omit<Form, 'name'> & {
+  name: 'name' | 'email' | 'password' | 'token';
+};
+
+export interface Form {
+  key: string;
+  name: 'name' | 'email' | 'password';
+  placeholder: string;
+  type: 'text' | 'email' | 'password';
+  value: string;
+}
+
+export interface Input {
+  key: string;
+  value: string;
+}
+
+export interface Navigation {
+  key: string;
+  link: string;
+  linkText: string;
+  title: string;
+  onClick?: Callback;
+}
+
+export interface AuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  success: boolean;
+  user: User;
+}
+
+export interface CabinetInitial {
+  cabinet: {
+    form: Record<string, string>;
+    inputs: Record<string, string>;
+    isPending: boolean;
+  };
+}
+
+export type User = { email: string; name: string };

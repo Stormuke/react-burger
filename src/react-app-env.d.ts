@@ -10,3 +10,9 @@ declare type AppError =
   | null;
 
 declare type Endpoint = string;
+
+declare type ParseActions<T> = {
+  [Property in keyof T]: Parameters<T[Property]>[0] extends undefined
+    ? Callback
+    : (payload: Parameters<T[Property]>[0]) => void;
+};

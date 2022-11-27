@@ -1,12 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { IngredientsStore, OrderStore } from 'services';
+import {
+  AuthStore,
+  CabinetStore,
+  IngredientsStore,
+  OrderStore,
+} from 'services';
 import { rtkQueryErrorLogger } from '../utils/middlewares';
 
 const rootReducer = {
   ingredients: IngredientsStore.ingredientsReducer,
   order: OrderStore.orderReducer,
+  auth: AuthStore.authReducer,
+  cabinet: CabinetStore.cabinetReducer,
 };
 
 const middlewares = [rtkQueryErrorLogger];

@@ -1,0 +1,18 @@
+.cabinet {
+  margin: 0 auto;
+  width: 67%;
+  padding-top: 228px;
+  display: flex;
+  gap: 60px;
+
+  &Navigation {
+    width: 320px;
+  }
+
+  &Info {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 480px;
+  }
+}

@@ -1,23 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { useCallback } from 'react';
-import { IngredientsInitialState, UseIngredientsAction } from 'types/types';
+import { IngredientsInitialState } from 'types/types';
 import { v4 } from 'uuid';
 import { getIngredientsThunk } from './ingredientsActions';
-import { useAppDispatch } from '../rootReducer';
 
 const initialState: IngredientsInitialState = {
   response: { success: false, data: [] },
   isPending: false,
   error: null,
   tab: 'bun',
+  selectedCard: null,
 };
 
-const slice = createSlice({
+export const slice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {
     reset: () => ({ ...initialState }),
-    handleTab: (state, { payload }: PayloadAction<string>) => {
+    handleTabSwitch: (state, { payload }: PayloadAction<string>) => {
       state.tab = payload;
     },
   },
@@ -43,18 +42,3 @@ const slice = createSlice({
 });
 
 export default slice.reducer;
-
-export const useAllIngredientsActions = (): UseIngredientsAction => {
-  const dispatch = useAppDispatch();
-
-  const handleGetIngredients = useCallback(
-    (endpoint) => dispatch(getIngredientsThunk(endpoint)),
-    [dispatch],
-  );
-
-  const handleTabSwitch = useCallback(
-    (value) => dispatch(slice.actions.handleTab(value)),
-    [dispatch],
-  );
-  return { handleGetIngredients, handleTabSwitch };
-};

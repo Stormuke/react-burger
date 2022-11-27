@@ -8,7 +8,9 @@ const ErrorFallback: ComponentType<FallbackProps> = ({
 }) => (
   <div role="alert">
     <p>{error}</p>
-    <Button onClick={resetErrorBoundary}>Обновить страницу</Button>
+    <Button onClick={resetErrorBoundary} htmlType="button">
+      Обновить страницу
+    </Button>
   </div>
 );
 
