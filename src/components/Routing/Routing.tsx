@@ -1,18 +1,17 @@
-import { lazy, useEffect, useMemo } from 'react';
+import { lazy, useCallback, useEffect, useMemo } from 'react';
 import type { RouteProps } from 'react-router-dom';
 import { Route, Switch, useLocation, useHistory } from 'react-router-dom';
-import { CabinetStore, IngredientsStore } from 'services';
-import { unwrapResult } from '@reduxjs/toolkit';
+import { AuthStore, CabinetStore, IngredientsStore } from 'services';
 import { useAppDispatch } from 'services/rootReducer';
 import { getCookie } from 'utils/cookie';
-import { useCreateSliceActions } from 'utils/useCreateSliceActions';
-import { AppHeader } from '../AppHeader/AppHeader';
-import { NotFound } from '../../pages/NotFound/NotFound';
-import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
+import { isFulfilled, isRejected } from '@reduxjs/toolkit';
+import { NotFound } from 'pages/NotFound/NotFound';
+import { ProtectedRoute } from 'components/ProtectedRoute/ProtectedRoute';
+import { Modal } from 'components/Modal/Modal';
+import { IngredientsDetails } from 'components/IgredientsDetails/IngredientsDetails';
+import { AppHeader } from 'components/AppHeader/AppHeader';
 
 import styles from '../../pages/Constructor/styles.module.scss';
-import { IngredientsDetails } from '../IgredientsDetails/IngredientsDetails';
-import { Modal } from '../Modal/Modal';
 
 const Constructor = lazy(() => import('../../pages/Constructor/Constructor'));
 const Cabinet = lazy(() => import('../../pages/Cabinet/Cabinet'));
@@ -22,7 +21,8 @@ type RoutingType = RouteProps & { protected: boolean };
 
 const Routing = (): JSX.Element | null => {
   const dispatch = useAppDispatch();
-  const cookie = getCookie('accessToken');
+  const accessToken = getCookie('accessToken');
+  const refreshToken = getCookie('refreshToken');
   const location = useLocation<{
     isPopup: boolean;
   }>();
@@ -32,45 +32,54 @@ const Routing = (): JSX.Element | null => {
   /*****************************************************
    *                     Экшены
    ***************************************************/
-  const { handleInputsData } = useCreateSliceActions(
-    CabinetStore.slice.actions,
-  );
 
   /*****************************************************
    *                     Колбеки
    ***************************************************/
 
-  const getUser = async (): Promise<void> => {
-    const res = await dispatch(
-      IngredientsStore.getUserDataThunk({
-        url: 'auth/user',
-        cookie: cookie as string,
-      }),
-    );
-
-    const response = unwrapResult(res);
-
-    if (response.success) {
-      handleInputsData(response.user);
-    }
-  };
-
   const handleClose = (): void => {
     history.goBack();
   };
+
+  const handleGetUser = useCallback(async () => {
+    const res = await dispatch(
+      CabinetStore.getUserDataThunk({
+        url: 'auth/user',
+        cookie: accessToken as string,
+      }),
+    );
+    if (isRejected(res)) {
+      const refresh = await dispatch(
+        AuthStore.postAuthFormThunk({
+          endpoint: 'auth/token',
+          body: { token: refreshToken as string },
+        }),
+      );
+
+      if (isFulfilled(refresh)) {
+        dispatch(
+          CabinetStore.getUserDataThunk({
+            url: 'auth/user',
+            cookie: accessToken as string,
+          }),
+        );
+      }
+    }
+  }, [accessToken, dispatch, refreshToken]);
 
   /*****************************************************
    *                     Сайды
    ***************************************************/
   useEffect(() => {
-    if (cookie) {
-      getUser();
+    if (accessToken) {
+      handleGetUser();
     }
-
-    dispatch(IngredientsStore.getIngredientsThunk('ingredients'));
-
     // eslint-disable-next-line
-  }, []);
+  }, [accessToken]);
+
+  useEffect(() => {
+    dispatch(IngredientsStore.getIngredientsThunk('ingredients'));
+  }, []); // eslint-disable-line
 
   /*****************************************************
    *                     Мемоизация
