@@ -1,0 +1,10 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  &Buttons {
+    display: flex;
+    gap: 24px;
+  }
+}
