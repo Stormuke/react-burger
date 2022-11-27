@@ -4,11 +4,7 @@ import { CabinetInitial } from '../../types/types';
 const selectSelf = (state: { cabinet: CabinetInitial }): CabinetInitial =>
   state.cabinet;
 
-const inputsSelector = createSelector(selectSelf, (state) => state.inputs);
-
-export const allCabinetSelector = createSelector(
-  [inputsSelector],
-  (inputs) => ({
-    inputs,
-  }),
+export const cabinetSelector = createSelector(
+  selectSelf,
+  (state) => state.cabinet,
 );
