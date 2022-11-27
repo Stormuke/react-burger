@@ -4,7 +4,7 @@ import {
   Input,
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { AuthStore, CabinetStore } from 'services';
+import { AuthStore } from 'services';
 import { useCreateSliceActions } from 'utils/useCreateSliceActions';
 import { useAppDispatch, useAppSelector } from 'services/rootReducer';
 import { Redirect, useHistory, useRouteMatch } from 'react-router-dom';
@@ -13,7 +13,7 @@ import type { Navigation } from 'types/types';
 import { AuthAndResetNavigation } from 'components/AuthAndResetNavigation/AuthAndResetNavigation';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { Loader } from 'utils/ui/Loader/Loader';
-import { getCookie, setCookie } from 'utils/cookie';
+import { getCookie } from 'utils/cookie';
 
 import styles from './styles.module.scss';
 
@@ -57,10 +57,6 @@ const Auth: FC = () => {
 
   const { handleInput, reset } = useCreateSliceActions(AuthStore.slice.actions);
 
-  const { handleInputsData } = useCreateSliceActions(
-    CabinetStore.slice.actions,
-  );
-
   const formInputs = useMemo(
     () =>
       url === '/register' || url === '/login'
@@ -86,11 +82,10 @@ const Auth: FC = () => {
       const res = await dispatch(
         AuthStore.postAuthFormThunk({
           endpoint:
-            url === '/forgot-password'
-              ? 'password-reset'
-              : url === '/reset-password'
-              ? 'password-reset/reset'
-              : `auth${url}`,
+            {
+              '/forgot-password': 'password-reset',
+              '/reset-password': 'password-reset/reset',
+            }[url as string] ?? `auth${url}`,
           body: values,
         }),
       );
@@ -98,17 +93,21 @@ const Auth: FC = () => {
       const data = unwrapResult(res);
 
       if (data.success) {
-        if (url === '/login') {
-          history.replace('/');
-          setCookie('accessToken', data.accessToken.split(' ')[1]);
-          setCookie('refreshToken', data.refreshToken);
-          handleInputsData(data.user);
-        }
-        if (url === '/register') {
-          history.replace('/login');
-        }
-        if (url === '/forgot-password') {
-          history.replace('/reset-password');
+        switch (url) {
+          case '/login':
+            history.replace('/');
+            break;
+          case '/register':
+            history.replace('/login');
+            break;
+          case '/forgot-password':
+            history.replace('/reset-password');
+            break;
+          case '/reset-password':
+            history.replace('/login');
+            break;
+          default:
+            history.replace('/');
         }
       }
     },
