@@ -162,8 +162,11 @@ export interface UseOrderAction {
 }
 
 export interface AuthInitial {
+  /** Ошибка**/
   error: AppError;
+  /** Форма **/
   form: AuthForm[];
+  /** Статус пендинга **/
   isPending: boolean;
 }
 
@@ -172,39 +175,56 @@ type AuthForm = Omit<Form, 'name'> & {
 };
 
 export interface Form {
+  /** Ключ **/
   key: string;
+  /** Имя **/
   name: 'name' | 'email' | 'password';
+  /** Подсказка **/
   placeholder: string;
+  /** Тип инпута **/
   type: 'text' | 'email' | 'password';
+  /** Значение инпута **/
   value: string;
 }
 
 export interface Input {
+  /** Ключ **/
   key: string;
+  /** Значение **/
   value: string;
 }
 
-export interface Navigation {
-  key: string;
+export interface Navigation extends TitleAndKey {
+  /** Ссылка навигации **/
   link: string;
+  /** Подсказка **/
   linkText: string;
-  title: string;
+  /** Колбек кнопки**/
   onClick?: Callback;
 }
 
 export interface AuthResponse {
+  /** Токен доступа **/
   accessToken: string;
+  /** Токен обновления **/
   refreshToken: string;
+  /** Статус запроса **/
   success: boolean;
+  /** Данные юзера **/
   user: User;
 }
 
 export interface CabinetInitial {
-  cabinet: {
-    form: Record<string, string>;
-    inputs: Record<string, string>;
-    isPending: boolean;
-  };
+  cabinet: Cabinet;
+}
+
+interface Cabinet {
+  /** Объект формы **/
+  form: Record<string, string>;
+  /** Объект инпутов **/
+  inputs: Record<string, string>;
+  /** Статус **/
+  isPending: boolean;
 }
 
 export type User = { email: string; name: string };
