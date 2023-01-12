@@ -1,0 +1,9 @@
+.feed {
+  width: 1240px;
+  margin: 0 auto;
+
+  &Content {
+    display: flex;
+    gap: 60px;
+  }
+}
