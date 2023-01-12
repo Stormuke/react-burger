@@ -1,10 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  CloseReason,
-  FeedInitial,
-  WsActions,
-  WsMessage,
-} from 'types/types';
+import { CloseReason, FeedInitial, WsActions, WsMessage } from 'types/types';
 
 const initialState: FeedInitial = {
   wsOrders: {
@@ -57,6 +52,13 @@ export const slice = createSlice({
     wsAuthConnectionSuccess: (state) => {
       state.wsOrders.authState.isAuthConnected = true;
     },
+    wsAuthConnectionClosed: (
+      state,
+      { payload }: PayloadAction<CloseReason>,
+    ) => {
+      state.wsOrders.state.isConnected = false;
+      state.wsOrders.state.closeReason = payload;
+    },
     wsAuthGetMessage: (state, { payload }: PayloadAction<WsMessage>) => {
       state.wsOrders.authState.currentUserOrders.orders = payload.orders;
     },
@@ -73,7 +75,7 @@ export const wsAction: WsActions = {
 };
 
 export const wsAuthActions: WsActions = {
-  onClose: slice.actions.wsConnectionClosed,
+  onClose: slice.actions.wsAuthConnectionClosed,
   onError: slice.actions.wsConnectionError,
   onMessage: slice.actions.wsAuthGetMessage,
   onOpen: slice.actions.wsAuthConnectionSuccess,
