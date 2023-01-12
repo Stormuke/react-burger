@@ -1,3 +1,7 @@
+import {
+  ActionCreatorWithoutPayload,
+  ActionCreatorWithPayload,
+} from '@reduxjs/toolkit';
 import { ReactElement } from 'react';
 
 /* Данные ингредиентов */
@@ -156,7 +160,11 @@ export interface IngredientsData {
 export interface UseOrderAction {
   handleDelete: (id: string) => void;
   handleDrop: (item: BurgerIngredientsData) => void;
-  handlePostOrder: (data: { body: object; endpoint: Endpoint }) => void;
+  handlePostOrder: (data: {
+    body: object;
+    cookie: string;
+    endpoint: Endpoint;
+  }) => void;
   handleReset: Callback;
   handleSort: (item: { dragIndex: number; hoverIndex: number }) => void;
 }
@@ -204,14 +212,14 @@ export interface Navigation extends TitleAndKey {
 }
 
 export interface AuthResponse {
-  /** Токен доступа **/
-  accessToken: string;
   /** Токен обновления **/
   refreshToken: string;
   /** Статус запроса **/
   success: boolean;
   /** Данные юзера **/
   user: User;
+  /** Токен доступа **/
+  accessToken?: string;
 }
 
 export interface CabinetInitial {
@@ -227,4 +235,140 @@ interface Cabinet {
   isPending: boolean;
 }
 
-export type User = { email: string; name: string };
+export type User = {
+  /** Почта **/
+  email: string;
+  /** Имя **/
+  name: string;
+};
+
+export interface FeedInitial {
+  /** Лента заказов **/
+  wsOrders: WsOrders;
+}
+
+interface WsOrders {
+  /** Стейт юзера **/
+  authState: wsAuthState;
+  /** Общие заказы **/
+  orders: WsMessage;
+  /** Состояние подключения к сокету **/
+  state: wsState;
+}
+
+export interface WsMessage {
+  /** Массив заказов **/
+  orders: FeedOrder[];
+  /** Всего **/
+  total: number;
+  /** Всего сегодня **/
+  totalToday: number;
+}
+
+interface wsState {
+  /** Причина закрытия соединения **/
+  closeReason: null | CloseReason;
+  /** Ошибка **/
+  error: AppError;
+  /** Успешное подключение **/
+  isConnected: boolean;
+}
+
+interface wsAuthState {
+  /** Стор конкретного юзера **/
+  currentUserOrders: WsMessage;
+  /** Успешно подключеное авторизованое соединение **/
+  isAuthConnected: boolean;
+}
+
+export interface CloseReason {
+  /** Код ошибки **/
+  code: number;
+  /** Причина **/
+  reason: string;
+  wasClean: boolean;
+}
+
+export interface WsActions {
+  onClose: ActionCreatorWithPayload<CloseReason>;
+  onError: ActionCreatorWithPayload<string>;
+  onMessage: ActionCreatorWithPayload<WsMessage>;
+  onOpen: ActionCreatorWithoutPayload;
+  wsInit: ActionCreatorWithoutPayload;
+  wsSendMessage: ActionCreatorWithoutPayload;
+}
+
+export interface FeedOrder {
+  /** Дата создания **/
+  createdAt: string;
+  /** Финальная цена **/
+  finalPrice: number;
+  /** Айди ингредиентов **/
+  ingredients: string[];
+  /** Название заказа **/
+  name: string;
+  /** Номер заказа **/
+  number: number;
+  /** Статус **/
+  status: string;
+  /** Время обновления **/
+  updatedAt: string;
+}
+
+export interface FeedCardData {
+  /** Время заказа **/
+  date: string;
+  /** Массив заказов **/
+  details: ParsedOrderArray[];
+  /** Номер заказа **/
+  orderNumber: string;
+  /** Цена **/
+  price: number;
+  /** Статус **/
+  status: string;
+  /** Название заказа **/
+  title: string;
+}
+
+export interface FeedDetailsProps {
+  /** Массив заказов **/
+  feedArray: FeedOrder[];
+}
+
+export interface ParsedOrderDetails {
+  /** Массив распаршеных заказов **/
+  array: ParsedOrderArray[];
+  /** Цена **/
+  totalPrice: number;
+}
+
+interface ParsedOrderArray {
+  /** Колличество игредиентов **/
+  count: number;
+  /** Айди ингредиента **/
+  id: string;
+  /** Картинка **/
+  image: string;
+  /** Название **/
+  name: string;
+  /** Стоимость **/
+  price: number;
+}
+
+export type ParsedFeed = ParsedOrderDetails & {
+  /** Дата заказа **/
+  date: string;
+  /** Номер заказа **/
+  orderNumber: string;
+  /** Статус **/
+  status: string;
+  /** Название заказа **/
+  title: string;
+};
+
+export interface FeedListProps {
+  /** Массив заказов **/
+  feedArray: FeedOrder[];
+  /** Стейт компонента **/
+  isFull?: boolean;
+}
