@@ -69,12 +69,17 @@ export const webSocketMiddleware =
           };
 
           dispatch(onClose(closeReason));
+          socket = null;
         };
 
         socket.onmessage = (event: MessageEvent) => {
           const parsedData = JSON.parse(event.data);
           dispatch(onMessage(parsedData));
         };
+
+        if (type === onClose.type) {
+          socket.close();
+        }
 
         if (type === wsSendMessage.type) {
           const message = isAuth ? { ...payload, token } : { ...payload };
