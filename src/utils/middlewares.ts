@@ -1,5 +1,12 @@
-import { isRejected, isRejectedWithValue } from '@reduxjs/toolkit';
+import {
+  AnyAction,
+  isRejected,
+  isRejectedWithValue,
+  MiddlewareAPI,
+} from '@reduxjs/toolkit';
 import type { Middleware } from '@reduxjs/toolkit';
+import { getCookie } from './cookie';
+import { CloseReason, WsActions } from '../types/types';
 
 /**
  * Централизованная мидлвара для обработки ошибок с асинхронных запросов
@@ -14,7 +21,7 @@ export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
 
       if (action?.error) {
         // eslint-disable-next-line no-alert
-        alert('Произошла ошибка, попробуйте еще раз')
+        alert('Произошла ошибка, попробуйте еще раз');
       }
     }
   } catch (error) {
@@ -24,3 +31,58 @@ export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
     next(action);
   }
 };
+
+/**
+ * мидлвара для подключения по веб сокетам
+ */
+
+export const webSocketMiddleware =
+  (wsUrl: string, wsActions: WsActions, isAuth?: boolean) =>
+  (store: MiddlewareAPI) => {
+    let socket: WebSocket | null = null;
+    return (next: (i: AnyAction) => void) => (action: AnyAction) => {
+      const { onOpen, onError, onClose, wsInit, onMessage, wsSendMessage } =
+        wsActions;
+      const { dispatch } = store;
+      const { type, payload } = action;
+
+      const token = getCookie('accessToken');
+
+      if (type === wsInit.type) {
+        socket = new WebSocket(isAuth ? `${wsUrl}?token=${token}` : wsUrl);
+      }
+
+      if (socket) {
+        socket.onopen = () => {
+          dispatch(onOpen());
+        };
+
+        socket.onerror = (error) => {
+          dispatch(onError(`Ошибка: ${error}`));
+        };
+
+        socket.onclose = (event) => {
+          const closeReason: CloseReason = {
+            code: event.code,
+            reason: event.reason,
+            wasClean: event.wasClean,
+          };
+
+          dispatch(onClose(closeReason));
+        };
+
+        socket.onmessage = (event: MessageEvent) => {
+          const parsedData = JSON.parse(event.data);
+          dispatch(onMessage(parsedData));
+        };
+
+        if (type === wsSendMessage.type) {
+          const message = isAuth ? { ...payload, token } : { ...payload };
+
+          socket.send(JSON.stringify(message));
+        }
+      }
+
+      next(action);
+    };
+  };
