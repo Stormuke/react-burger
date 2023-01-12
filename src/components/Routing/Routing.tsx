@@ -34,9 +34,12 @@ const Routing = (): JSX.Element | null => {
   const isPopup = location.state && location.state.isPopup;
 
   const feed = useAppSelector(FeedStore.selectors.feedSelector);
-  const { wsConnectionStart, wsAuthConnectionStart } = useCreateSliceActions(
-    FeedStore.reducers.slice.actions,
-  );
+  const {
+    wsConnectionStart,
+    wsAuthConnectionStart,
+    wsConnectionClosed,
+    wsAuthConnectionClosed,
+  } = useCreateSliceActions(FeedStore.reducers.slice.actions);
 
   /*****************************************************
    *                     Колбеки
@@ -84,15 +87,26 @@ const Routing = (): JSX.Element | null => {
 
   useEffect(() => {
     dispatch(IngredientsStore.getIngredientsThunk('ingredients'));
-
   }, []); // eslint-disable-line
 
   useEffect(() => {
     if (location.pathname.includes('feed')) {
       dispatch(wsConnectionStart);
+    } else {
+      dispatch(() =>
+        wsConnectionClosed({ code: 1, reason: 'leaveFeed', wasClean: true }),
+      );
     }
-    if (location.pathname.includes('profile')) {
+    if (location.pathname.includes('profile/orders') && accessToken !== '') {
       dispatch(wsAuthConnectionStart);
+    } else {
+      dispatch(() =>
+        wsAuthConnectionClosed({
+          code: 1,
+          reason: 'leaveProfile',
+          wasClean: true,
+        }),
+      );
     }
   }, [location.pathname]); // eslint-disable-line
 
