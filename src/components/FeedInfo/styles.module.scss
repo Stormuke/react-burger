@@ -1,0 +1,29 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.info {
+  width: 580px;
+  display: flex;
+  gap: 36px;
+
+  &Content {
+    width: 272px;
+  }
+
+  &Numbers {
+    height: 321px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-wrap: wrap;
+    overflow: hidden;
+  }
+
+  &Number {
+    color: #0cc;
+    width: 31%;
+  }
+}

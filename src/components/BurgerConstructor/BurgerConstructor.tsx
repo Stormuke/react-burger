@@ -20,8 +20,8 @@ import { EmptyConstructor } from 'components/EmptyConstructor/EmptyConstructor';
 import styles from './styles.module.scss';
 
 export const BurgerConstructor: FC = () => {
-  const login = getCookie('accessToken');
   const history = useHistory();
+  const accessToken = getCookie('accessToken');
 
   /***************************************************
    *                   Стейты                        *
@@ -43,12 +43,13 @@ export const BurgerConstructor: FC = () => {
    *                   Колбеки                        *
    ***************************************************/
   const handleOrder = (): void =>
-    login
+    accessToken
       ? handlePostOrder({
           endpoint: 'orders',
           body: {
             ingredients: order.map((item) => item._id),
           },
+          cookie: accessToken,
         })
       : history.replace('/login');
 

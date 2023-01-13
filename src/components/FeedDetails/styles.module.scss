@@ -1,0 +1,62 @@
+.details {
+  width: 640px;
+  margin: 0 auto;
+
+  &Full {
+    padding-top: 122px;
+  }
+
+  &Container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 640px;
+    max-height: 312px;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #8585ad;
+    }
+  }
+
+  &Item {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    width: 608px;
+  }
+
+  &Title {
+    text-align: center;
+  }
+
+  &Image {
+    border-radius: 100px;
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border: 2px solid #801ab2;
+    background: #131316;
+  }
+
+  &Name {
+    width: 380px;
+  }
+
+  &Price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  &Footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

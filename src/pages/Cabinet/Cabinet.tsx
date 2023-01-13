@@ -20,7 +20,11 @@ const cabinetButtons: Navigation[] = [
     key: '3',
     link: '/',
     linkText: '',
-    onClick: () => deleteCookie('accessToken'),
+    onClick: () => {
+      localStorage.clear();
+      deleteCookie('refreshToken');
+      deleteCookie('accessToken');
+    },
   },
 ];
 
@@ -36,7 +40,6 @@ const Cabinet: FC = ({ children }) => {
   const { handleInputValue, resetForm } = useCreateSliceActions(
     CabinetStore.slice.actions,
   );
-
 
   const handleSubmit = useCallback(
     async (e: SyntheticEvent) => {

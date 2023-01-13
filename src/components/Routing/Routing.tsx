@@ -1,8 +1,8 @@
 import { lazy, useCallback, useEffect, useMemo } from 'react';
 import type { RouteProps } from 'react-router-dom';
 import { Route, Switch, useLocation, useHistory } from 'react-router-dom';
-import { AuthStore, CabinetStore, IngredientsStore } from 'services';
-import { useAppDispatch } from 'services/rootReducer';
+import { AuthStore, CabinetStore, FeedStore, IngredientsStore } from 'services';
+import { useAppDispatch, useAppSelector } from 'services/rootReducer';
 import { getCookie } from 'utils/cookie';
 import { isFulfilled, isRejected } from '@reduxjs/toolkit';
 import { NotFound } from 'pages/NotFound/NotFound';
@@ -12,10 +12,14 @@ import { IngredientsDetails } from 'components/IgredientsDetails/IngredientsDeta
 import { AppHeader } from 'components/AppHeader/AppHeader';
 
 import styles from '../../pages/Constructor/styles.module.scss';
+import { FeedDetails } from '../FeedDetails/FeedDetails';
+import { FeedList } from '../FeedList/FeedList';
+import { useCreateSliceActions } from '../../utils/useCreateSliceActions';
 
 const Constructor = lazy(() => import('../../pages/Constructor/Constructor'));
 const Cabinet = lazy(() => import('../../pages/Cabinet/Cabinet'));
 const Auth = lazy(() => import('../../pages/Auth/Auth'));
+const Feed = lazy(() => import('../../pages/Feed/Feed'));
 
 type RoutingType = RouteProps & { protected: boolean };
 
@@ -29,9 +33,13 @@ const Routing = (): JSX.Element | null => {
   const history = useHistory();
   const isPopup = location.state && location.state.isPopup;
 
-  /*****************************************************
-   *                     Экшены
-   ***************************************************/
+  const feed = useAppSelector(FeedStore.selectors.feedSelector);
+  const {
+    wsConnectionStart,
+    wsAuthConnectionStart,
+    wsConnectionClosed,
+    wsAuthConnectionClosed,
+  } = useCreateSliceActions(FeedStore.reducers.slice.actions);
 
   /*****************************************************
    *                     Колбеки
@@ -71,7 +79,7 @@ const Routing = (): JSX.Element | null => {
    *                     Сайды
    ***************************************************/
   useEffect(() => {
-    if (accessToken) {
+    if (accessToken && accessToken !== '') {
       handleGetUser();
     }
     // eslint-disable-next-line
@@ -80,6 +88,27 @@ const Routing = (): JSX.Element | null => {
   useEffect(() => {
     dispatch(IngredientsStore.getIngredientsThunk('ingredients'));
   }, []); // eslint-disable-line
+
+  useEffect(() => {
+    if (location.pathname.includes('feed')) {
+      dispatch(wsConnectionStart);
+    } else {
+      dispatch(() =>
+        wsConnectionClosed({ code: 1, reason: 'leaveFeed', wasClean: true }),
+      );
+    }
+    if (location.pathname.includes('profile/orders') && accessToken !== '') {
+      dispatch(wsAuthConnectionStart);
+    } else {
+      dispatch(() =>
+        wsAuthConnectionClosed({
+          code: 1,
+          reason: 'leaveProfile',
+          wasClean: true,
+        }),
+      );
+    }
+  }, [location.pathname]); // eslint-disable-line
 
   /*****************************************************
    *                     Мемоизация
@@ -90,6 +119,25 @@ const Routing = (): JSX.Element | null => {
         path: '/',
         exact: true,
         children: <Constructor />,
+        protected: false,
+      },
+      {
+        path: '/feed',
+        exact: true,
+        children: <Feed />,
+        protected: false,
+      },
+
+      {
+        path: '/feed/:id',
+        exact: true,
+        children: isPopup ? (
+          <Modal isOpened={isPopup} onClose={handleClose} title="">
+            <FeedDetails feedArray={feed.orders.orders} />
+          </Modal>
+        ) : (
+          <FeedDetails feedArray={feed.orders.orders} />
+        ),
         protected: false,
       },
       {
@@ -127,7 +175,10 @@ const Routing = (): JSX.Element | null => {
         children: (
           <ProtectedRoute>
             <Cabinet>
-              <NotFound isSmall />
+              <FeedList
+                feedArray={feed.authState.currentUserOrders.orders}
+                isFull
+              />
             </Cabinet>
           </ProtectedRoute>
         ),
@@ -138,7 +189,17 @@ const Routing = (): JSX.Element | null => {
         path: '/profile/orders/:id',
         children: (
           <ProtectedRoute>
-            <NotFound />
+            {isPopup ? (
+              <Modal isOpened={isPopup} onClose={handleClose} title="">
+                <FeedDetails
+                  feedArray={feed.authState.currentUserOrders.orders}
+                />
+              </Modal>
+            ) : (
+              <FeedDetails
+                feedArray={feed.authState.currentUserOrders.orders}
+              />
+            )}
           </ProtectedRoute>
         ),
         exact: true,
@@ -150,7 +211,8 @@ const Routing = (): JSX.Element | null => {
         protected: false,
       },
     ],
-    [isPopup], // eslint-disable-line
+    // eslint-disable-next-line
+    [isPopup, feed.orders.orders, feed.authState.currentUserOrders.orders],
   );
 
   /*****************************************************

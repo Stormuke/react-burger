@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthInitial, Input } from 'types/types';
+import { setCookie } from 'utils/cookie';
 import { postAuthFormThunk } from './authActions';
-import { setCookie } from '../../utils/cookie';
 
 const initialState: AuthInitial = {
   isPending: false,
@@ -56,8 +56,10 @@ export const slice = createSlice({
     });
     builder.addCase(postAuthFormThunk.fulfilled, (state, { payload }) => {
       state.isPending = false;
-      setCookie('accessToken', payload.accessToken.split(' ')[1]);
-      setCookie('refreshToken', payload.refreshToken);
+      if (payload.accessToken) {
+        setCookie('accessToken', payload.accessToken.split(' ')[1]);
+        setCookie('refreshToken', payload.refreshToken);
+      }
     });
   },
 });

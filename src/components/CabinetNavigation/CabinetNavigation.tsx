@@ -11,7 +11,7 @@ export const CabinetNavigation = ({
 }): ReactNode => {
   const { url } = useRouteMatch();
   return (
-    <div>
+    <div className={styles.navigation}>
       {navigation.map((item) => (
         <Link
           to={item.link}

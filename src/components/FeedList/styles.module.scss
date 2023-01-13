@@ -1,0 +1,21 @@
+.list {
+  width: 608px;
+  height: 812px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &Full {
+    width: 844px;
+    margin-top: 40px;
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #8585ad;
+  }
+}

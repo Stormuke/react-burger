@@ -5,18 +5,34 @@ import {
   AuthStore,
   CabinetStore,
   IngredientsStore,
+  FeedStore,
   OrderStore,
 } from 'services';
-import { rtkQueryErrorLogger } from '../utils/middlewares';
+import { rtkQueryErrorLogger, webSocketMiddleware } from 'utils/middlewares';
+import { getCookie } from 'utils/cookie';
 
 const rootReducer = {
   ingredients: IngredientsStore.ingredientsReducer,
   order: OrderStore.orderReducer,
   auth: AuthStore.authReducer,
   cabinet: CabinetStore.cabinetReducer,
+  [FeedStore.reducers.slice.name]: FeedStore.reducers.slice.reducer,
 };
 
-const middlewares = [rtkQueryErrorLogger];
+const accessToken = getCookie('accessToken');
+
+const middlewares = [
+  webSocketMiddleware(
+    'wss://norma.nomoreparties.space/orders/all',
+    FeedStore.reducers.wsAction,
+  ),
+    webSocketMiddleware(
+    'wss://norma.nomoreparties.space/orders',
+    FeedStore.reducers.wsAuthActions,
+    Boolean(accessToken !== ''),
+  ),
+  rtkQueryErrorLogger,
+];
 
 export const store = configureStore({
   reducer: rootReducer,
