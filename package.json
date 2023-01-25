@@ -52,7 +52,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cytest": "npx cypress open",
+    "deploy": "scp -r ./build/* stormuke@84.201.141.12:/home/stormuke/stellar-frontend"
   },
   "eslintConfig": {
     "extends": [
@@ -73,8 +75,12 @@
     ]
   },
   "devDependencies": {
+    "@4tw/cypress-drag-drop": "^2.2.3",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/compose-function": "^0.0.30",
     "@types/react-router-dom": "^5.1.7",
-    "@types/uuid": "^8.3.4"
+    "@types/uuid": "^8.3.4",
+    "cypress": "^12.3.0",
+    "eslint-plugin-cypress": "^2.12.1"
   }
 }
