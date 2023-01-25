@@ -1,8 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { apiInstance } from '../../utils/apiInstance';
+import { apiInstance } from 'utils/apiInstance';
+import type { UserData } from 'types/types';
 
 export const getUserDataThunk = createAsyncThunk<
-  { success: boolean; user: { email: string; name: string } },
+  UserData,
   { cookie: string; url: Endpoint }
 >('cabinet/getUserDataThunk', async ({ url, cookie }) => {
   const { data } = await apiInstance.get(url, {
@@ -13,7 +14,7 @@ export const getUserDataThunk = createAsyncThunk<
 });
 
 export const patchUserDataThunk = createAsyncThunk<
-  { success: boolean; user: { email: string; name: string } },
+  UserData,
   { body: object; cookie: string; url: Endpoint }
 >('cabinet/patchUserDataThunk', async ({ url, cookie, body }) => {
   const { data } = await apiInstance.patch(url, body, {
