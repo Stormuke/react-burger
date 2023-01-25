@@ -6,14 +6,18 @@ import {
 import { OrderStore } from 'services';
 import { BurgerElementProps } from 'types/types';
 import { useDrag, useDrop } from 'react-dnd';
+import { useCreateSliceActions } from 'utils/useCreateSliceActions';
 
 import styles from './styles.module.scss';
+
 
 export const BurgerElement: FC<BurgerElementProps> = ({ item, index }) => {
   /***************************************************
    *                   Селекторы
    ***************************************************/
-  const { handleDelete, handleSort } = OrderStore.useAllOrderActions();
+  const { handleDelete, handleSort } = useCreateSliceActions(
+    OrderStore.reducer.slice.actions,
+  );
 
   /***************************************************
    *                     Хуки
