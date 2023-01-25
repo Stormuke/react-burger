@@ -13,7 +13,7 @@ import { getCookie } from 'utils/cookie';
 
 const rootReducer = {
   ingredients: IngredientsStore.ingredientsReducer,
-  order: OrderStore.orderReducer,
+  order: OrderStore.reducer.slice.reducer,
   auth: AuthStore.authReducer,
   cabinet: CabinetStore.cabinetReducer,
   [FeedStore.reducers.slice.name]: FeedStore.reducers.slice.reducer,
