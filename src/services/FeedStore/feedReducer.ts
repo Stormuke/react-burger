@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CloseReason, FeedInitial, WsActions, WsMessage } from 'types/types';
 
-const initialState: FeedInitial = {
+export const initialState: FeedInitial = {
   wsOrders: {
     state: {
       error: null,
@@ -10,6 +10,7 @@ const initialState: FeedInitial = {
     },
     authState: {
       isAuthConnected: false,
+      closeReason: null,
       currentUserOrders: { total: 0, totalToday: 0, orders: [] },
     },
     orders: {
@@ -21,7 +22,7 @@ const initialState: FeedInitial = {
 };
 
 export const slice = createSlice({
-  name: 'orders',
+  name: 'feed',
   initialState,
   reducers: {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -56,8 +57,8 @@ export const slice = createSlice({
       state,
       { payload }: PayloadAction<CloseReason>,
     ) => {
-      state.wsOrders.state.isConnected = false;
-      state.wsOrders.state.closeReason = payload;
+      state.wsOrders.authState.isAuthConnected = false;
+      state.wsOrders.authState.closeReason = payload;
     },
     wsAuthGetMessage: (state, { payload }: PayloadAction<WsMessage>) => {
       state.wsOrders.authState.currentUserOrders.orders = payload.orders;
