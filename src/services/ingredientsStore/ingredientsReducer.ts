@@ -3,7 +3,7 @@ import { IngredientsInitialState } from 'types/types';
 import { v4 } from 'uuid';
 import { getIngredientsThunk } from './ingredientsActions';
 
-const initialState: IngredientsInitialState = {
+export const initialState: IngredientsInitialState = {
   response: { success: false, data: [] },
   isPending: false,
   error: null,

@@ -124,14 +124,16 @@ export interface IngredientsInitialState {
 }
 
 export interface OrderInitialState {
-  /** Ошибка **/
-  error: AppError;
-  /** Статус загрузки **/
-  isPending: boolean;
-  /** Наполнение заказа **/
-  order: BurgerIngredientsData[];
-  /** Ответ **/
-  response: Order;
+  orders: {
+    /** Ошибка **/
+    error: AppError;
+    /** Статус загрузки **/
+    isPending: boolean;
+    /** Наполнение заказа **/
+    order: BurgerIngredientsData[];
+    /** Ответ **/
+    response: Order;
+  };
 }
 
 /* Респонсы */
@@ -148,6 +150,12 @@ export interface Order {
   success: boolean;
 }
 
+export interface OrderRequest {
+  body: { ingredients: string[] };
+  cookie: string;
+  endpoint: Endpoint;
+}
+
 export interface IngredientsData {
   /** Массив ингредиентов **/
   data: BurgerIngredientsData[];
@@ -155,18 +163,9 @@ export interface IngredientsData {
   success: boolean;
 }
 
-/* Экшены */
-
-export interface UseOrderAction {
-  handleDelete: (id: string) => void;
-  handleDrop: (item: BurgerIngredientsData) => void;
-  handlePostOrder: (data: {
-    body: object;
-    cookie: string;
-    endpoint: Endpoint;
-  }) => void;
-  handleReset: Callback;
-  handleSort: (item: { dragIndex: number; hoverIndex: number }) => void;
+export interface UserData {
+  success: boolean;
+  user: { email: string; name: string };
 }
 
 export interface AuthInitial {
@@ -222,6 +221,11 @@ export interface AuthResponse {
   accessToken?: string;
 }
 
+export interface AuthRequest {
+  body: Record<string, string>;
+  endpoint: Endpoint;
+}
+
 export interface CabinetInitial {
   cabinet: Cabinet;
 }
@@ -275,6 +279,8 @@ interface wsState {
 }
 
 interface wsAuthState {
+  /** Причина закрытия соединения **/
+  closeReason: null | CloseReason;
   /** Стор конкретного юзера **/
   currentUserOrders: WsMessage;
   /** Успешно подключеное авторизованое соединение **/

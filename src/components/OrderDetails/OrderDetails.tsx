@@ -2,18 +2,19 @@ import type { FC } from 'react';
 import done from 'images/done.svg';
 import { OrderStore } from 'services';
 import { useAppSelector } from 'services/rootReducer';
+import { Loader } from 'utils/ui/Loader/Loader';
 
 import styles from './styles.module.scss';
-import { Loader } from '../../utils/ui/Loader/Loader';
+
 
 export const OrderDetails: FC = () => {
-  const { response, isPending } = useAppSelector(OrderStore.allOrderSelectors);
+  const orders = useAppSelector(OrderStore.dataSelector);
 
-  return isPending ? (
+  return orders.isPending ? (
     <Loader className={styles.spinner} />
   ) : (
     <div className={styles.content}>
-      <p className="text text_type_digits-large">{response.order.number}</p>
+      <p className="text text_type_digits-large" data-test="orderNumber">{orders.response.order.number}</p>
       <p className="text text_type_main-medium mt-8 mb-15">
         идентификатор заказа
       </p>

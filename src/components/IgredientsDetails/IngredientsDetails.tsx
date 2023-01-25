@@ -50,7 +50,7 @@ export const IngredientsDetails: FC = () => {
         alt={currentCard.name}
         className={styles.contentImage}
       />
-      <p className="text text_type_main-medium mt-4 mb-8">{currentCard.name}</p>
+      <p className="text text_type_main-medium mt-4 mb-8" data-test="ingredientName">{currentCard.name}</p>
       <div className={styles.contentDescription}>
         {description.map((item) => (
           <div className={styles.contentDescriptionItem} key={item.key}>

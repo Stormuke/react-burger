@@ -8,18 +8,20 @@ import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Modal } from 'components/Modal/Modal';
 import { OrderDetails } from 'components/OrderDetails/OrderDetails';
-import { useAppSelector } from 'services/rootReducer';
+import { useAppDispatch, useAppSelector } from 'services/rootReducer';
 import { OrderStore } from 'services';
 import { useDrop } from 'react-dnd';
-import { BurgerIngredientsData } from 'types/types';
+import { BurgerIngredientsData, OrderRequest } from 'types/types';
 import { v4 } from 'uuid';
 import { BurgerElement } from 'components/BurgerElement/BurgerElement';
 import { getCookie } from 'utils/cookie';
 import { EmptyConstructor } from 'components/EmptyConstructor/EmptyConstructor';
 
 import styles from './styles.module.scss';
+import { useCreateSliceActions } from '../../utils/useCreateSliceActions';
 
 export const BurgerConstructor: FC = () => {
+  const dispatch = useAppDispatch()
   const history = useHistory();
   const accessToken = getCookie('accessToken');
 
@@ -31,23 +33,27 @@ export const BurgerConstructor: FC = () => {
   /*****************************************************
    *                   Экшены                         *
    ***************************************************/
-  const { handlePostOrder, handleDrop, handleReset } =
-    OrderStore.useAllOrderActions();
+  const { handleDrop, reset } =
+    useCreateSliceActions(OrderStore.reducer.slice.actions);
 
   /*****************************************************
    *                   Селекторы                      *
    ***************************************************/
-  const { isPending, order } = useAppSelector(OrderStore.allOrderSelectors);
+  const orders = useAppSelector(OrderStore.dataSelector);
 
   /*****************************************************
    *                   Колбеки                        *
    ***************************************************/
+  const handlePostOrder = (body: OrderRequest): void => {
+    dispatch(OrderStore.postOrderThunk(body))
+  }
+
   const handleOrder = (): void =>
     accessToken
       ? handlePostOrder({
           endpoint: 'orders',
           body: {
-            ingredients: order.map((item) => item._id),
+            ingredients: orders.order.map((item) => item._id),
           },
           cookie: accessToken,
         })
@@ -57,10 +63,10 @@ export const BurgerConstructor: FC = () => {
    *                   Сайды                          *
    ***************************************************/
   useEffect(() => {
-    if (isPending) {
+    if (orders.isPending) {
       setIsPopupOpen(true);
     }
-  }, [isPending]);
+  }, [orders.isPending]);
 
   /*****************************************************
    *                   Хуки                           *
@@ -72,22 +78,22 @@ export const BurgerConstructor: FC = () => {
   });
 
   return (
-    <section className={styles.container} ref={dropTarget}>
-      {order.length === 0 ? (
+    <section className={styles.container} ref={dropTarget} data-test='burgerConstructor'>
+      {orders.order.length === 0 ? (
         <EmptyConstructor />
       ) : (
         <>
           <div className={styles.containerElement}>
             <ConstructorElement
-              text={`${order[0].name} (Верх)`}
-              thumbnail={order[0].image}
-              price={order[0].price}
+              text={`${orders.order[0].name} (Верх)`}
+              thumbnail={orders.order[0].image}
+              price={orders.order[0].price}
               type="top"
               isLocked
             />
           </div>
           <div className={styles.containerItems}>
-            {order.map(
+            {orders.order.map(
               (item, index) =>
                 item.type !== 'bun' && (
                   <BurgerElement item={item} index={index} key={item.key} />
@@ -96,9 +102,9 @@ export const BurgerConstructor: FC = () => {
           </div>
           <div className={styles.containerElement}>
             <ConstructorElement
-              text={`${order[0].name} (Низ)`}
-              thumbnail={order[0].image}
-              price={order[0].price}
+              text={`${orders.order[0].name} (Низ)`}
+              thumbnail={orders.order[0].image}
+              price={orders.order[0].price}
               type="bottom"
               isLocked
             />
@@ -107,12 +113,12 @@ export const BurgerConstructor: FC = () => {
           <div className={styles.containerCheckout}>
             <div className={styles.containerCheckoutPrice}>
               <p className="text text_type_digits-medium">
-                {order.reduce(
+                {orders.order.reduce(
                   (acc, item) =>
                     item.type === 'bun' ? acc + 0 : acc + item.price,
                   0,
                 ) +
-                  order[0].price * 2}
+                  orders.order[0].price * 2}
               </p>
               <CurrencyIcon type="primary" />
             </div>
@@ -124,7 +130,7 @@ export const BurgerConstructor: FC = () => {
           <Modal
             isOpened={isPopupOpen}
             onClose={() => {
-              handleReset();
+              reset();
               setIsPopupOpen(false);
             }}
             title=""

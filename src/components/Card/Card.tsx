@@ -18,7 +18,7 @@ export const Card: FC<CardProps> = ({ item }) => {
   /*****************************************************
    *                   Селекторы
    ***************************************************/
-  const { order } = useAppSelector(OrderStore.allOrderSelectors);
+  const { order } = useAppSelector(OrderStore.dataSelector);
 
   const count = order.filter((i) => i.name === item.name).length;
 
@@ -44,7 +44,11 @@ export const Card: FC<CardProps> = ({ item }) => {
       }}
       key={ingredientId}
     >
-      <div style={{ opacity }} className={styles.element}>
+      <div
+        style={{ opacity }}
+        className={styles.element}
+        data-test-id={ingredientId}
+      >
         <Counter count={count} size="default" />
         <img
           ref={drag}
