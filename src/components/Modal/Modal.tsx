@@ -36,7 +36,7 @@ export const Modal: FC<ModalProps> = ({
         <div className={styles.container}>
           <div className={styles.containerHeader}>
             <p className="text text_type_main-large">{title}</p>
-            <button className={styles.containerHeaderButton} onClick={onClose}>
+            <button className={styles.containerHeaderButton} onClick={onClose} data-test="closeButton">
               <CloseIcon type="primary" />
             </button>
           </div>
